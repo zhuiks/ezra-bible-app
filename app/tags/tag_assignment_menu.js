@@ -24,7 +24,11 @@ class TagAssignmentMenu {
 
   init(tabIndex=undefined) {
     var currentVerseListMenu = bible_browser_controller.getCurrentVerseListMenu(tabIndex);
-    currentVerseListMenu.find('.assign-tag-menu-button').bind('click', (event) => { this.handleMenuClick(event); });
+    currentVerseListMenu.find('.assign-tag-menu-button').bind('click', (event) => {
+      console.time('show');
+      this.handleMenuClick(event); 
+      console.timeEnd('show');
+    });
   }
 
   getMenu() {
@@ -47,7 +51,7 @@ class TagAssignmentMenu {
     }
   }
 
-  async handleMenuClick(event) {
+  handleMenuClick(event) {
     var assignTagMenuButton = this.getCurrentMenuButton();
 
     if (assignTagMenuButton.hasClass('ui-state-disabled')) {
@@ -57,6 +61,7 @@ class TagAssignmentMenu {
     if (this.menuIsOpened) {
       bible_browser_controller.handleBodyClick();
     } else {
+
       bible_browser_controller.book_selection_menu.hide_book_menu();
       bible_browser_controller.tag_selection_menu.hideTagMenu();
       bible_browser_controller.module_search.hideSearchMenu();
@@ -72,6 +77,13 @@ class TagAssignmentMenu {
       menu.css('left', leftOffset);
 
       menu.show();
+
+      if (tags_controller.currentTagList != null) {
+        var menuId = 'tag-assignment-menu-taglist';
+        var menu = document.getElementById(menuId);
+        tags_controller.render_tags_from_list(tags_controller.currentTagList, menu);
+      }
+
       this.menuIsOpened = true;
       event.stopPropagation();
     }
@@ -87,27 +99,28 @@ class TagAssignmentMenu {
   }
 
   moveTagAssignmentList(moveToMenu=false) {
-    var tagsContainer = this.getTagsContainer();
     var tagsSearchInput = document.getElementById('tags-search-input');
-
-    var parentId = this.getTagsContainerParentId();
-    var toolBarId = 'tags-content';
-    var menuId = 'tag-assignment-menu-taglist';
+    var toolBarId = 'tags-content-global';
     var filterId = 'tag-assignment-menu-filter';
 
     var assignTagMenuButton = this.getCurrentMenuButton();
 
-    if (parentId == toolBarId && moveToMenu) {
-      var menu = document.getElementById(menuId);
-      menu.appendChild(tagsContainer);
+    if (moveToMenu) {
       var filter = document.getElementById(filterId);
       filter.appendChild(tagsSearchInput);
       assignTagMenuButton.show();
-    } else if (parentId == menuId && !moveToMenu) {
+
+      var menuId = 'tag-assignment-menu-taglist';
+      var menu = document.getElementById(menuId);
+      tags_controller.currentTarget = menu;
+    } else {
       tags_controller.handle_tag_accordion_change();
       assignTagMenuButton.hide();
       var toolBar = document.getElementById(toolBarId);
-      toolBar.appendChild(tagsContainer);
+
+      if (tags_controller.currentTagList != null) {
+        tags_controller.currentTarget = toolBar;
+      }
     }
   }
 }

@@ -667,12 +667,48 @@ class TagsController {
   }
 
   async render_tags(tag_list) {
+    this.currentTagList = tag_list;
+    var global_tags_box_el = document.getElementById('tags-content-global');
+    this.render_tags_from_list(this.currentTagList, global_tags_box_el);
+  }
+
+  destroy_tag_list_lazy_loader(target_element) {
+    var elementId = target_element.getAttribute('id');
+    console.log(elementId);
+    var instance = $('#' + elementId + ' .lazy').Lazy({ chainable: false });
+    instance.destroy();
+  }
+
+  init_tag_list_lazy_loader(target_element) {
+    var elementId = target_element.getAttribute('id');
+    var current_book = bible_browser_controller.tab_controller.getTab().getBook();
+
+    var elementList = $('#' + elementId + ' .lazy');
+
+    elementList.lazy({
+      tagLoader: function(element) {
+        var tagIndex = element.attr('tag-index');
+
+        var fullTag = tagTemplate({
+          tag: tags_controller.currentLazyTagList[tagIndex],
+          current_book: current_book,
+          rename_tag_label: i18n.t("general.rename"),
+          delete_tag_label: i18n.t("tags.delete-tag-permanently"),
+        });
+
+        element.append(fullTag).load();
+      },
+      appendScroll: $('#' + elementId)
+    });
+  }
+
+  async render_tags_from_list(tag_list, target_element) {
     //console.time("render_tags");
     var current_book = bible_browser_controller.tab_controller.getTab().getBook();
-    var global_tags_box_el = document.getElementById('tags-content-global');
+    this.destroy_tag_list_lazy_loader(target_element);
 
     // Empty global tags element
-    global_tags_box_el.innerHTML = '';
+    target_element.innerHTML = '';
 
     var all_tags_html = tagListTemplate({
       tags: tag_list,
@@ -682,7 +718,10 @@ class TagsController {
       delete_tag_label: i18n.t("tags.delete-tag-permanently"),
     });
 
-    global_tags_box_el.innerHTML = all_tags_html;
+    target_element.innerHTML = all_tags_html;
+
+    tags_controller.currentLazyTagList = tag_list;
+    this.init_tag_list_lazy_loader(target_element);
 
     tags_controller.refresh_timestamps_and_book_tag_statistics(tag_list, current_book);
     configure_button_styles('#tags-content');
@@ -948,7 +987,7 @@ class TagsController {
     } else { // No verses are selected!
 
       if (this.verses_were_selected_before) {
-        this.uncheck_all_checkbox_elements();
+        //this.uncheck_all_checkbox_elements();
       }
 
       this.verses_were_selected_before = false;
@@ -1048,7 +1087,7 @@ class TagsController {
     });
     $('#filter-dialog').find('input').bind('click', tags_controller.handle_tag_filter_type_click);
 
-    $('#tags-search-input').bind('keyup', tags_controller.handle_tag_search_input);
+    $('#tags-search-input').bind('keyup', (e) => { tags_controller.handle_tag_search_input(e); });
     $('#tags-search-input').bind('keydown', function(e) {
       e.stopPropagation(); 
     });
@@ -1161,11 +1200,23 @@ class TagsController {
 
   handle_tag_search_input(e) {
     clearTimeout(tags_controller.tag_search_timeout);
-    var search_value = $(this).val();
+    var search_value = $(e.target).val();
 
-    tags_controller.tag_search_timeout = setTimeout(function filter_tag_list() {
+    tags_controller.tag_search_timeout = setTimeout(() => {
       //console.time('filter-tag-list');
-      var tags_content = document.getElementById('tags-content-global');
+      this.currentFilteredTagList = [];
+
+      for (var i = 0; i < this.currentTagList.length; i++) {
+        var currentTag = this.currentTagList[i];
+
+        if (tags_controller.tag_title_matches_filter(currentTag.title, search_value)) {
+          this.currentFilteredTagList.push(currentTag);
+        }
+      }
+
+      this.render_tags_from_list(this.currentFilteredTagList, this.currentTarget);
+
+      /*var tags_content = document.getElementById('tags-content-global');
       var tag_labels = tags_content.querySelectorAll('.cb-label');
       $(tags_content).find('.checkbox-tag').hide();
 
@@ -1175,7 +1226,7 @@ class TagsController {
         if (tags_controller.tag_title_matches_filter(current_label.text(), search_value)) {
           $(current_label.closest('.checkbox-tag')).show();
         }
-      }
+      }*/
       //console.timeEnd('filter-tag-list');
     }, 200);
   }

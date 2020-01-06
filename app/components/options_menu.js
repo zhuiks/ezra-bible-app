@@ -187,6 +187,8 @@ class OptionsMenu {
       
         bible_browser_controller.tag_assignment_menu.moveTagAssignmentList(false);
         currentToolBar.show();
+        var target = document.getElementById('tags-content-global');
+        tags_controller.render_tags_from_list(tags_controller.currentTagList, target);
         resize_app_container();
       } else {
         currentToolBar.hide();

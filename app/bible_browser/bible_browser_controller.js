@@ -419,9 +419,9 @@ class BibleBrowserController {
   hideAllMenus() {
     this.book_selection_menu.hide_book_menu();
     this.tag_selection_menu.hideTagMenu();
-    this.tag_assignment_menu.hideTagAssignmentMenu();
     this.module_search.hideSearchMenu();
     this.optionsMenu.hideDisplayMenu();
+    this.tag_assignment_menu.hideTagAssignmentMenu();
   }
 
   bindEventsAfterBibleTextLoaded = async function(tabIndex=undefined) {
