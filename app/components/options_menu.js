@@ -183,7 +183,9 @@ class OptionsMenu {
     bible_browser_controller.settings.set('showToolBar', this.toolBarSwitchChecked());
 
     setTimeout(() => {
-      if (this.toolBarSwitchChecked()) {
+      var toolBox = document.getElementById('bible-browser-toolbox');
+      
+      if (this.toolBarSwitchChecked() && toolBox.style.display == 'none') {
       
         bible_browser_controller.tag_assignment_menu.moveTagAssignmentList(false);
         currentToolBar.show();

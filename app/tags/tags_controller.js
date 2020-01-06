@@ -25,8 +25,10 @@ class TagsController {
     this.verse_selection_blocked = false;
     this.verses_were_selected_before = false;
 
+    this.rename_tag_label = i18n.t("general.rename");
     this.assign_tag_label = i18n.t("tags.assign-tag");
     this.unassign_tag_label = i18n.t("tags.remove-tag-assignment");
+    this.delete_tag_label = i18n.t("tags.delete-tag-permanently");
   
     this.tag_to_be_deleted = null;
     this.tag_to_be_deleted_title = null;
@@ -674,7 +676,6 @@ class TagsController {
 
   destroy_tag_list_lazy_loader(target_element) {
     var elementId = target_element.getAttribute('id');
-    console.log(elementId);
     var instance = $('#' + elementId + ' .lazy').Lazy({ chainable: false });
     instance.destroy();
   }
@@ -692,8 +693,8 @@ class TagsController {
         var fullTag = tagTemplate({
           tag: tags_controller.currentLazyTagList[tagIndex],
           current_book: current_book,
-          rename_tag_label: i18n.t("general.rename"),
-          delete_tag_label: i18n.t("tags.delete-tag-permanently"),
+          rename_tag_label: tags_controller.rename_tag_label,
+          delete_tag_label: tags_controller.delete_tag_label
         });
 
         element.append(fullTag).load();
@@ -713,9 +714,7 @@ class TagsController {
     var all_tags_html = tagListTemplate({
       tags: tag_list,
       current_book: current_book,
-      current_filter: $('#tags-search-input').val(),
-      rename_tag_label: i18n.t("general.rename"),
-      delete_tag_label: i18n.t("tags.delete-tag-permanently"),
+      current_filter: $('#tags-search-input').val()
     });
 
     target_element.innerHTML = all_tags_html;
