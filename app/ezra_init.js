@@ -37,6 +37,10 @@ let nsi = null;
 const UiHelper = require('./app/helpers/ui_helper.js');
 const uiHelper = new UiHelper();
 
+// Analytics Helper
+const AnalyticsHelper = require('./app/helpers/analytics_helper.js');
+const analyticsHelper = new AnalyticsHelper();
+
 let models = null;
 let bible_browser_controller = null;
 let tags_controller = null;
@@ -364,6 +368,8 @@ async function initApplication()
   const NewReleaseChecker = require('./app/helpers/new_release_checker.js');
   var newReleaseChecker = new NewReleaseChecker('new-release-info-box');
   newReleaseChecker.check();
+
+  analyticsHelper.trackEvent("Application", "startup", null, null);
 }
 
 $(document).ready(function() {
