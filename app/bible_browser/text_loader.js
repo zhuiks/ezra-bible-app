@@ -436,11 +436,14 @@ class TextLoader {
       target.removeClass('verse-list-book');
     }
 
-    if (append) {
-      htmlVerseList = target[0].innerHTML + htmlVerseList;
-    }
+    var currentWebview = bible_browser_controller.getCurrentVerseListComposite(tabIndex).find('.verse-list-webview')[0];
 
-    target.html(htmlVerseList);
+    /*if (append) {
+      htmlVerseList = target[0].innerHTML + htmlVerseList;
+    }*/
+
+    //target.html(htmlVerseList);
+    currentWebview.executeJavaScript(`loadVerseListContent('${htmlVerseList}');`);
 
     if (listType == 'search_results') {
       var currentTab = bible_browser_controller.tab_controller.getTab(tabIndex);

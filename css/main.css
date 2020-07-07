@@ -116,6 +116,11 @@ h2 {
 
 .verse-list-container {
   margin-top: 3em;
+  height: 100%;
+}
+
+.verse-list-composite {
+  height: 100%;
 }
 
 .verse-list-menu {

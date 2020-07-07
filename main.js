@@ -83,6 +83,7 @@ function createWindow () {
                                   title: "Ezra Project " + app.getVersion(),
                                   webPreferences: {
                                     nodeIntegration: true,
+                                    webviewTag: true,
                                     preload: preloadScript
                                   },
                                   icon: path.join(__dirname, 'icons/ezra-project.png')
