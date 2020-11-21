@@ -198,6 +198,27 @@ jobs:
             name: ezra-project_centos8_latest
             path: ezra-project_latest.rpm
 
+    build-app-image:
+        name: Build Linux AppImage
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v1
+
+        - name: Build Linux AppImage
+          uses: docker://toklein/ezra-ubuntu-2004:latest
+          with:
+            entrypoint: /usr/bin/npm
+            args: run build-app-image
+
+        - name: Rename AppImage file
+          run: cp *.AppImage $GITHUB_WORKSPACE/ezra-project_latest.AppImage
+
+        - name: Upload AppImage file
+          uses: actions/upload-artifact@v1.0.0
+          with:
+            name: ezra-project_appimage_latest
+            path: ezra-project_latest.AppImage
+
     release:
       if: "github.event.release"
       name: Publish release artifacts
@@ -260,6 +281,11 @@ jobs:
         with:
           name: ezra-project_centos8_latest
 
+      - name: Download AppImage package
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: ezra-project_appimage_latest
+
       - name: Rename artifacts for publishing
         shell: bash
         run: |
@@ -274,6 +300,7 @@ jobs:
           mv ezra-project_centos8_latest/ezra-project_latest.rpm packages/ezra-project_centos8-${GITHUB_REF##*/}.rpm
           mv ezra-project_fedora29_latest/ezra-project_latest.rpm packages/ezra-project_fedora29-${GITHUB_REF##*/}.rpm
           mv ezra-project_fedora31_latest/ezra-project_latest.rpm packages/ezra-project_fedora31-${GITHUB_REF##*/}.rpm
+          mv ezra-project_appimage_latest/ezra-project_latest.AppImage packages/ezra-project_${GITHUB_REF##*/}.AppImage
 #          mv ezra-project_fedora32_latest/ezra-project_latest.rpm packages/ezra-project_fedora32-${GITHUB_REF##*/}.rpm
 
       - name: Publish artifacts

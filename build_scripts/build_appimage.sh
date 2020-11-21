@@ -22,4 +22,5 @@ do
     cp -L $item release/ezra-project.AppDir/usr/lib/x86_x64-linux-gnu
 done
 
-ARCH=x86_64 appimagetool release/ezra-project.AppDir
+wget https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage && chmod a+x appimagetool*
+ARCH=x86_64 ./appimagetool-x86_64.AppImage release/ezra-project.AppDir
