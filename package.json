@@ -41,6 +41,7 @@
     "install-node-prune": "bash build_scripts/install_node_prune.sh",
     "install-node-prune-win": "build_scripts\\install_node_prune_win32.bat",
     "build-linux": "./build_scripts/build.sh",
+    "build-app-image": "./build_scripts/build_appimage.sh",
     "build-mac": "./build_scripts/build_mac.sh",
     "update-loc-metrics": "./build_scripts/update_loc_metrics.sh",
     "update-cc-metrics": "./build_scripts/update_complexity_metrics.sh",
