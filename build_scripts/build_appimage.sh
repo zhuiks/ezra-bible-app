@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#npm run build-linux
+npm run build-linux
 mkdir -p release/ezra-project.AppDir
 mkdir -p release/ezra-project.AppDir/usr/lib/x86_x64-linux-gnu
 
