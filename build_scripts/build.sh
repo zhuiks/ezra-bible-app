@@ -20,3 +20,4 @@ if which rpm >/dev/null; then
 fi
 
 npm run package-linux
+chmod a+rw release
