@@ -205,13 +205,13 @@ jobs:
         - uses: actions/checkout@v1
 
         - name: Generate distribution
-          run: npm run build-linux
-
-        - name: Build Linux AppImage
           uses: docker://toklein/ezra-ubuntu-2004:latest
           with:
             entrypoint: /usr/bin/npm
-            args: run build-app-image
+            args: run build-linux
+
+        - name: Build Linux AppImage
+          run: npm run build-app-image
 
         - name: Rename AppImage file
           run: cp *.AppImage $GITHUB_WORKSPACE/ezra-project_latest.AppImage
