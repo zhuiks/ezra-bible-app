@@ -205,9 +205,7 @@ jobs:
         - uses: actions/checkout@v1
 
         - name: Generate distribution
-          with:
-            entrypoint: /usr/bin/npm
-            args: run build-linux
+          run: npm run build-linux
 
         - name: Build Linux AppImage
           uses: docker://toklein/ezra-ubuntu-2004:latest
