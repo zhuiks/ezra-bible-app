@@ -6,7 +6,16 @@ mkdir -p release/ezra-project.AppDir/usr/lib/x86_x64-linux-gnu
 cp icons/ezra-project.png release/ezra-project.AppDir
 cp -a release/ezra-project-linux-x64/* release/ezra-project.AppDir
 cp ezra-project.desktop release/ezra-project.AppDir/
-cp build_scripts/AppRun.sh release/ezra-project.AppDir/AppRun
+
+# Workaround to increase compatibility with older systems; see https://github.com/darealshinji/AppImageKit-checkrt for details
+mkdir -p release/ezra-project.AppDir/usr/optional/
+wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/exec-x86_64.so -O ./release/ezra-project.AppDir/usr/optional/exec.so
+
+mkdir -p release/ezra-project.AppDir/usr/optional/libstdc++/
+cp -L /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ./release/ezra-project.AppDir/usr/optional/libstdc++/
+
+wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/AppRun-patched-x86_64 -O release/ezra-project.AppDir/AppRun
+chmod a+x release/ezra-project.AppDir/AppRun
 
 EZRA_DEPS=`ldd release/ezra-project.AppDir/ezra-project | awk '{ print $3 }' | grep -v -e '^$'`
 NSI_DEPS=`ldd node_modules/node-sword-interface/build/Release/node_sword_interface.node | awk '{ print $3 }' | grep -v -e '^$'`

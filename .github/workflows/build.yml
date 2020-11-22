@@ -210,10 +210,10 @@ jobs:
             entrypoint: /usr/bin/npm
             args: run build-linux
 
-        - name: Build Linux AppImage
+        - name: Build AppImage
           run: npm run build-app-image
 
-        - name: Move AppImage file
+        - name: Rename AppImage file
           run: mv Ezra_Project-x86_64.AppImage $GITHUB_WORKSPACE/ezra-project_latest.AppImage
 
         - name: Upload AppImage file
@@ -226,7 +226,7 @@ jobs:
       if: "github.event.release"
       name: Publish release artifacts
       runs-on: ubuntu-latest
-      needs: [ build-win32, build-ubuntu-1804, build-ubuntu-1910, build-ubuntu-2004, build-mint18, build-mint19, build-buster, build-fedora29, build-fedora31, build-centos8 ]
+      needs: [ build-win32, build-ubuntu-1804, build-ubuntu-1910, build-ubuntu-2004, build-mint18, build-mint19, build-buster, build-fedora29, build-fedora31, build-centos8, build-app-image ]
 
       steps:
       - name: Download win32 package
