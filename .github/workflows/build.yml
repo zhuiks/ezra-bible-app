@@ -213,8 +213,8 @@ jobs:
         - name: Build Linux AppImage
           run: npm run build-app-image
 
-        - name: Rename AppImage file
-          run: cp *.AppImage $GITHUB_WORKSPACE/ezra-project_latest.AppImage
+        - name: Move AppImage file
+          run: mv Ezra_Project-x86_64.AppImage $GITHUB_WORKSPACE/ezra-project_latest.AppImage
 
         - name: Upload AppImage file
           uses: actions/upload-artifact@v1.0.0
