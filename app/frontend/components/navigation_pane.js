@@ -207,7 +207,9 @@ class NavigationPane {
       var chapterLinkHtml = `<a href='${href}' class='navigation-link chapter-link'>${i}</a>`;
       navigationPane.append(chapterLinkHtml);
 
-      sectionHeaderNumber = this.addHeaderNavLinksForChapter(cachedVerseListTabId, navigationPane, sectionTitleElements, i, sectionHeaderNumber);
+      if (cachedVerseListTabId != null) {
+        sectionHeaderNumber = this.addHeaderNavLinksForChapter(cachedVerseListTabId, navigationPane, sectionTitleElements, i, sectionHeaderNumber);
+      }
     }
   }
 
@@ -318,11 +320,17 @@ class NavigationPane {
 
   getCachedVerseListTabId(tabIndex=undefined) {
     var currentVerseList = app_controller.getCurrentVerseList(tabIndex);
-    var firstLink = currentVerseList[0].querySelector('a.nav');
     var cachedVerseListTabId = null;
-    
-    if (firstLink !== null) {
-      cachedVerseListTabId = firstLink.getAttribute('name').split(' ')[0];
+
+    try {
+      var firstLink = currentVerseList[0].querySelector('a.nav');
+      var cachedVerseListTabId = null;
+      
+      if (firstLink !== null) {
+        cachedVerseListTabId = firstLink.getAttribute('name').split(' ')[0];
+      }
+    } catch (e) {
+      console.log("NavigationPane: Could not get cached verse list tab id!");s
     }
 
     return cachedVerseListTabId;
