@@ -10,6 +10,7 @@
     "url": "https://github.com/ezra-project/ezra-project.git"
   },
   "main": "main.js",
+  "browser": "app/frontend/bundle/init.js",
   "scripts": {
     "start": "electron .",
     "bundle": "node_modules/.bin/browserify app/frontend/ezra_init.js -u node_modules/electron/index.js -t brfs --bare --ignore-missing -o dist/ezra_init.js",
@@ -54,6 +55,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "@material/mwc-button": "^0.20.0",
     "@sentry/browser": "^6.0.1",
     "@sentry/electron": "^2.0.3",
     "buffer": "^6.0.3",
@@ -66,6 +68,7 @@
     "electron-settings": "^3.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-window-state": "^5.0.3",
+    "esm": "^3.2.25",
     "fs-extra": "^9.0.1",
     "i18next": "^19.8.4",
     "i18next-electron-language-detector": "0.0.10",
@@ -87,6 +90,7 @@
     "v8-compile-cache": "^2.2.0"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.1",
     "@sentry/cli": "^1.59.0",
     "better-docs": "^2.3.2",
     "brfs": "^2.0.2",
@@ -105,6 +109,7 @@
     "node-gyp": "^7.1.2",
     "npm-check-updates": "^10.1.1",
     "pug-cli": "^1.0.0-alpha6",
+    "rollup": "^2.45.2",
     "sequelize-cli": "^5.5.1",
     "spectron": "^11.1.0",
     "terser": "^5.5.1",
