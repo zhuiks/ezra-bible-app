@@ -1,4 +1,4 @@
-import '@material/mwc-button';
+import './ezra-fullscreen-toggle.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -14,7 +14,7 @@ template.innerHTML = `
   }
   </style>
   <div class="wrapper">
-    <mwc-button raised label="Contained Button"></mwc-button>
+    <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;
 
   class EzraControlPan extends HTMLElement {
