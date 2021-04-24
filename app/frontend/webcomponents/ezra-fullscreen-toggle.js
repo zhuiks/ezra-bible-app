@@ -1,9 +1,8 @@
-import '@material/mwc-button';
-// import 'material-design-icons';
+import '@material/mwc-icon-button-toggle';
 
 const template = document.createElement('template');
 template.innerHTML = `
-  <mwc-button raised label="Fullscreen Button"></mwc-button>
+  <mwc-icon-button-toggle offIcon="fullscreen" onIcon="fullscreen_exit"></mwc-icon-button-toggle>
 `;
 
 class EzraFullscreenToggle extends HTMLElement {

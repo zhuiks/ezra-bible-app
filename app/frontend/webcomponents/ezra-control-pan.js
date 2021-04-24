@@ -9,7 +9,7 @@ template.innerHTML = `
     right: 0;
     min-height: 2em;
     min-width: 2em;
-    background: gray;
+    background: yellow;
     z-index: 100;
   }
   </style>
