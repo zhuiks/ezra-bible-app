@@ -637,21 +637,6 @@ h2 {
   border: 1px dashed #2779aa;
 }
 
-.fullscreen-button {
-  position: fixed;
-  top: 0.5em;
-  right: 1em;
-  width: auto;
-  height: auto;
-  padding: 0.3em 0.4em;
-  font-size: 1em;
-  z-index: 100;
-}
-
-.OSX .fullscreen-button {
-  display: none;
-}
-
 .display-options-button>i {
   font-size: 1.3em;
 }
