@@ -130,7 +130,6 @@ class StartupController
     document.getElementById('verse-list-tabs').innerHTML = verseListTabs;
     document.getElementById('boxes').innerHTML = boxes;
 
-    document.getElementById(('component-container')).appendChild(document.createElement('ezra-control-pan'));
   }
 
   async initIpcClients() {
@@ -217,6 +216,12 @@ class StartupController
     });
   }
 
+  initWebComponents() {
+    if (typeof window.initWebComponents === 'function') {
+      window.initWebComponents();
+    }
+  }
+
   async initApplication() {
     console.time("application-startup");
 
@@ -284,6 +289,8 @@ class StartupController
     console.log("Initializing i18n ...");
     await this.initI18N();
     $(document).localize();
+
+    this.initWebComponents();
 
     if (this._platformHelper.isTest()) {
       await this.initTest();
