@@ -1,5 +1,6 @@
 import './ezra-control-pan.js';
 
 window.initWebComponents = function () {
-  document.getElementById(('app-container')).appendChild(document.createElement('ezra-control-pan'));
+  const container = document.getElementById(('verse-list-tabs'));
+  container.insertBefore(document.createElement('ezra-control-pan'), container.firstChild);
 }

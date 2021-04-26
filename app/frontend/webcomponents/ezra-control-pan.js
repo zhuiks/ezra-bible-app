@@ -1,19 +1,18 @@
+import './ezra-show-info';
 import './ezra-fullscreen-toggle.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
   <style>
   .wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-height: 2em;
-    min-width: 2em;
+    position: relative;
+    width: 100%;
     background: yellow;
     z-index: 100;
   }
   </style>
   <div class="wrapper">
+    <ezra-show-info></ezra-show-info>
     <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;
 
