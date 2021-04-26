@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ function initializeSpectron(additionalArgs = []) {
       EZRA_TESTING: true
     },
     startTimeout: 20000,
-    chromeDriverLogPath: '../chromedriverlog.txt'
+    chromeDriverLogPath: './chromedriverlog.txt'
   });
 }
 

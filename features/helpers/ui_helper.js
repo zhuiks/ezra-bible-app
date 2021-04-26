@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ async function waitUntilGlobalLoaderIsHidden(timeoutMs = 20000) {
 
   await spectronHelper.getWebClient().waitUntil(async () => { // Wait until loader is hidden
     var loaderDisplay = await loader.getCSSProperty('display');
-    await spectronHelper.getWebClient().saveScreenshot('../test_screenshot.png');
+    await spectronHelper.getWebClient().saveScreenshot('./test_screenshot.png');
     await spectronHelper.sleep();
 
     return loaderDisplay.value == "none";

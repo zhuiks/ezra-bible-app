@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    along with Ezra Bible App. See the file LICENSE.
    If not, see <http://www.gnu.org/licenses/>. */
 
-const { AfterAll, BeforeAll, Before, After } = require("cucumber");
+const { AfterAll, BeforeAll, Before, After, Status } = require("cucumber");
 
 const chaiAsPromised = require("chai-as-promised");
 const spectronHelper = require("../helpers/spectron_helper.js");
@@ -115,6 +115,12 @@ After("@remove-last-note-after-scenario", async function() {
   await saveButton.click();
 
   await spectronHelper.sleep();
+});
+
+After(async function(scenario) {
+  if (scenario.result.status === Status.FAILED) {
+    await spectronHelper.getWebClient().saveScreenshot('./test_screenshot.png');
+  }
 });
 
 AfterAll({ timeout: 10000}, async function () {

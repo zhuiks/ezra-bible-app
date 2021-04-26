@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ const RESET_SHORTCUT = 'mod+0';  // Ctrl/Cmd 0
 const SETTINGS_KEY = 'verse-text-size';
 
 /**
- * The TextSizeSettings component implements the buttons two control text (font size) of the verse and
- * other elements. Size update is done by updating (adding new and deleting old) css rule
+ * The TextSizeSettings component implements the buttons to control text (font size) of the verses, tags and notes.
+ * Size update is done by updating (adding new and deleting old) css rule.
  * 
  * @category Component
  */
@@ -36,7 +36,7 @@ class TextSizeSettings {
   constructor() {
     this._textSizeValue = this.DEFAULT_TEXT_SIZE;
     this._shouldTagsNotesResize = true;
-    this.openMenuButton = '.text-size-settings';
+    this.openMenuButton = '.text-size-settings-button';
     this.menuContainer = '.text-size-menu';
     this.menuIsOpened = false;
     this.stylesheet = null;  // instance of CSSStyleSheet https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleSheet

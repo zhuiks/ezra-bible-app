@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ class PlatformHelper {
 
     } else if (this.isCordova()) {
 
-      var appId = getOldPath ? 'ezra-project' : 'net.ezrabibleapp.cordova';
+      var appId = getOldPath ? 'de.ezraproject.cordova' : 'net.ezrabibleapp.cordova';
 
       // TODO adapt this for ios later
       return `/sdcard/Android/data/${appId}`;

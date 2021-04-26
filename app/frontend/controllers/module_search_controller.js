@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,8 +65,12 @@ class ModuleSearchController {
 
   async cancelModuleSearch() {
     this.disableCancelButton();
+
     var tab = app_controller.tab_controller.getTab(this.currentSearchTabIndex);
-    tab.setSearchCancelled(true);
+    if (tab != null) {
+      tab.setSearchCancelled(true);
+    }
+
     this.enableOtherFunctionsAfterSearch();
 
     var currentProgressValue = this.getCurrentProgressValue();
@@ -97,28 +101,44 @@ class ModuleSearchController {
     cancelSearchButton.addClass('ui-state-disabled');
   }
 
-  disableOtherFunctionsDuringSearch() {
+  getAllMenuButtonSelectors() {
+    return [
+      '.book-select-button',
+      '.tag-select-button',
+      '.assign-tag-menu-button',
+      '.new-standard-tag-button',
+      '.display-options-button',
+      '.text-size-settings-button'
+    ];
+  }
+
+  toggleMenuButtons(enable=true) {
     var currentVerseListMenu = app_controller.getCurrentVerseListMenu();
+    var allMenuButtonSelectors = this.getAllMenuButtonSelectors();
 
-    var bookSelectButton = currentVerseListMenu.find('.book-select-button');
-    bookSelectButton.addClass('ui-state-disabled');
+    allMenuButtonSelectors.forEach((selector) => {
+      var button = currentVerseListMenu.find(selector);
 
-    var tagSelectButton = currentVerseListMenu.find('.tag-select-button');
-    tagSelectButton.addClass('ui-state-disabled');
+      if (enable) {
+        button.removeClass('ui-state-disabled');
+      } else {
+        button.addClass('ui-state-disabled');
+      }
+    });
+  }
 
+  disableOtherFunctionsDuringSearch() {
+    this.toggleMenuButtons(false);
+
+    var currentVerseListMenu = app_controller.getCurrentVerseListMenu();
     var bibleSelect = currentVerseListMenu.find('select.bible-select');
     bibleSelect.selectmenu("disable");
   }
 
   enableOtherFunctionsAfterSearch() {
+    this.toggleMenuButtons(true);
+
     var currentVerseListMenu = app_controller.getCurrentVerseListMenu(this.currentSearchTabIndex);
-
-    var bookSelectButton = currentVerseListMenu.find('.book-select-button');
-    bookSelectButton.removeClass('ui-state-disabled');
-
-    var tagSelectButton = currentVerseListMenu.find('.tag-select-button');
-    tagSelectButton.removeClass('ui-state-disabled');
-
     var bibleSelect = currentVerseListMenu.find('select.bible-select');
     bibleSelect.selectmenu("enable");
   }

@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -87,6 +87,8 @@ async function createWindow () {
   const path = require('path');
   const url = require('url');
 
+  console.time('Startup');
+
   var preloadScript = '';
   if (!isDev) {
     preloadScript = path.join(__dirname, 'app/frontend/helpers/sentry.js')
@@ -118,6 +120,10 @@ async function createWindow () {
     ipcMain.handle('initIpc', async (event, arg) => {
       await ipc.init(isDev, mainWindow);
     });
+
+    ipcMain.handle('startupCompleted', async (event, arg) => {
+      console.timeEnd('Startup');
+    });
   }
 
   if (shouldUseDarkMode()) {
@@ -140,7 +146,7 @@ async function createWindow () {
                                     enableRemoteModule: true,
                                     defaultEncoding: "UTF-8"
                                   },
-                                  icon: path.join(__dirname, 'icons/ezra.png'),
+                                  icon: path.join(__dirname, `icons/${platformHelper.isWin() ? 'ezra.ico' : 'ezra.png'}`),
                                   backgroundColor: bgColor
                                  });
  

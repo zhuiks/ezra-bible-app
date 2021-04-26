@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -695,6 +695,9 @@ class TagsController {
         if (bookCount == 0 && cbLabelClassList.contains('cb-label-assigned')) {
           cbLabel.classList.remove('cb-label-assigned');
         }
+
+        var checkbox_tag = cbLabel.parentNode;
+        checkbox_tag.setAttribute('book-assignment-count', bookCount);
       } else {
         cbLabel.classList.remove('cb-label-assigned');
       }

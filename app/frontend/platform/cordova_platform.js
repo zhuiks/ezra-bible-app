@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,7 +93,6 @@ class CordovaPlatform {
     uiHelper.showGlobalLoadingIndicator();
 
     this.initPersistenceAndStart();
-    //this.startNodeJsEngine(); 
   }
 
   onPermissionDenied() {
@@ -106,8 +105,8 @@ class CordovaPlatform {
       // If the request came back in a very short time we assume that the user permanently denied the permission
       // and show a corresponding message.
 
-      var permanentPermissionDecisionInfoPart1 = i18n.t('cordova.previous-permission-decision-part1');
-      var permanentPermissionDecisionInfoPart2 = i18n.t('cordova.previous-permission-decision-part2');
+      var permanentPermissionDecisionInfoPart1 = i18n.t('cordova.permanent-permission-decision-part1');
+      var permanentPermissionDecisionInfoPart2 = i18n.t('cordova.permanent-permission-decision-part2');
 
       $('#permission-decision').html(`
         ${permanentPermissionDecisionInfoPart1}
@@ -230,24 +229,20 @@ class CordovaPlatform {
 
     `, async () => {
 
-      uiHelper.updateLoadingSubtitle("Initializing internationalization");
+      uiHelper.updateLoadingSubtitle("Initializing i18n");
 
       window.ipcI18n = new IpcI18n();
-      await startup_controller.initI18N();
+      await startup.initI18N();
 
-      var hasPermission = false;
-      
-      try {
-        hasPermission = await this.hasPermission();
-      } catch (e) {
+      this.hasPermission().then((result) => {
+        if (result == true) {
+          this.initPersistenceAndStart();
+        } else {
+          this.showPermissionInfo();
+        }
+      }, () => {
         console.log("Failed to check existing permissions ...");
-      }
-
-      if (hasPermission == true) {
-        this.initPersistenceAndStart();
-      } else {
-        this.showPermissionInfo();
-      }
+      });
     });
   }
 
@@ -260,7 +255,7 @@ class CordovaPlatform {
     uiHelper.updateLoadingSubtitle("Initializing database");
     await ipcGeneral.initDatabase();
 
-    await startup_controller.initApplication();
+    await startup.initApplication();
   }
 
   mainProcessListener(message) {
@@ -274,7 +269,7 @@ class CordovaPlatform {
       this._isFullScreenMode = false;
 
       AndroidFullScreen.showSystemUI(() => {
-        console.log("Left fullscreen mode");
+        // console.log("Left fullscreen mode");
       }, () => {
         console.error("Could not leave immersive mode");
       });
@@ -283,7 +278,7 @@ class CordovaPlatform {
       this._isFullScreenMode = true;
 
       AndroidFullScreen.immersiveMode(() => {
-        console.log("Entered immersive / fullscreen mode");
+        // console.log("Entered immersive / fullscreen mode");
       }, () => {
         console.error("Could not switch to immersive mode");
       });

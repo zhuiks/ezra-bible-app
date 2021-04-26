@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,16 +60,18 @@ class NotesController {
 
     currentVerseListFrame[0].querySelectorAll('.verse-box').forEach(verseBox => {
       const verseNotes = verseBox.querySelector('.verse-notes');
-      verseNotes.classList.remove('visible');
 
-      verseBox.querySelector('.notes-info').addEventListener('mousedown', (e) => {
-        this._handleNotesIndicatorClick(e, verseNotes);
+      if (verseNotes != null) {
+        verseNotes.classList.remove('visible');
 
-      });
+        verseBox.querySelector('.notes-info').addEventListener('mousedown', (e) => {
+          this._handleNotesIndicatorClick(e, verseNotes);
+        });
 
-      verseNotes.addEventListener('click', (event) => {
-        this._handleNotesClick(event);
-      });
+        verseNotes.addEventListener('click', (event) => {
+          this._handleNotesClick(event);
+        });
+      }
     });
 
     const bookNoteBox = currentVerseListFrame[0].querySelector('.book-notes');
@@ -337,6 +339,7 @@ class NotesController {
 
   _createEditor(notesElement) {
     var CodeMirror = getCodeMirror();
+    CodeMirror.commands.save = () => this.restoreCurrentlyEditedNotes();
 
     var notesElementText = notesElement.querySelector('.verse-notes-text');
     notesElementText.classList.add('edited');
@@ -355,7 +358,10 @@ class NotesController {
       lineWrapping: true,
       viewportMargin: Infinity,
       autofocus: true,
-      extraKeys: { "Enter": "newlineAndIndentContinueMarkdownList" },
+      extraKeys: { 
+        "Enter": "newlineAndIndentContinueMarkdownList",
+        "Ctrl-Enter": "save", "Cmd-Enter": () => "save", 
+      },
       theme: this.theme
     });
 

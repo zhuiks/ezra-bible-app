@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class DbHelper {
       console.log('Database not yet existing in user directory!');
   
       if (fs.existsSync(oldDbPath)) {
-        console.log('Copying database from previously used application directory.');
+        console.log(`Copying database from previously used application directory ${oldDbPath}.`);
         fs.copySync(oldDbPath, dbPath);
       } else {
         console.log('Setting up empty database from template.');
@@ -96,7 +96,7 @@ class DbHelper {
     var config = {
       username: null,
       password: null,
-      database: "ezra-project",
+      database: "ezra-bible-app",
       host: null,
       dialect: "sqlite",
       storage: this.getDbFilePath(databaseDir),

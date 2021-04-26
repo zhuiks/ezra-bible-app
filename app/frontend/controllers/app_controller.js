@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ class AppController {
 
     var metaTab = this.tab_controller.getTab(ui.index);
 
-    if (metaTab.selectCount >= 2) {
+    if (metaTab != null && metaTab.selectCount >= 2) {
       // Only perform the following actions from the 2nd select (The first is done when the tab is created)
 
       this.hideAllMenus();
@@ -498,6 +498,12 @@ class AppController {
     var currentVerseListFrame = this.getCurrentVerseListFrame(tabIndex);
     var verseList = currentVerseListFrame.find('.verse-list');
     return verseList;
+  }
+
+  getCurrentVerseListHeader(tabIndex=undefined) {
+    var currentVerseListFrame = this.getCurrentVerseListFrame(tabIndex);
+    var verseListHeader = currentVerseListFrame.find('.verse-list-header');
+    return verseListHeader;
   }
 
   getCurrentVerseListLoadingIndicator(tabIndex=undefined) {

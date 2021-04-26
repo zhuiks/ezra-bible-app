@@ -1,6 +1,6 @@
 /* This file is part of Ezra Bible App.
 
-   Copyright (C) 2019 - 2021 Tobias Klein <contact@ezra-project.net>
+   Copyright (C) 2019 - 2021 Ezra Bible App Development Team <contact@ezrabibleapp.net>
 
    Ezra Bible App is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,19 +91,11 @@ class I18nHelper {
   async getChapterTranslation(lang) {
     var language = lang||this.getLanguage();
 
-    if (this._isCordova) {
-      language = 'en';
-    }
-
     return await this.getSpecificTranslation(language, 'bible-browser.chapter');
   }
 
   async getPsalmTranslation(lang) {
-    var language = lang??this.getLanguage();
-
-    if (this._isCordova) {
-      language = 'en';
-    }
+    var language = lang||this.getLanguage();
 
     return await this.getSpecificTranslation(language, 'bible-browser.psalm');
   }
