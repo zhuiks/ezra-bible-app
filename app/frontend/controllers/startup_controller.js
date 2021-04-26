@@ -129,6 +129,8 @@ class StartupController
     document.getElementById('display-options-menu').innerHTML = displayOptionsMenu;
     document.getElementById('verse-list-tabs').innerHTML = verseListTabs;
     document.getElementById('boxes').innerHTML = boxes;
+
+    document.getElementById(('component-container')).appendChild(document.createElement('ezra-control-pan'));
   }
 
   async initIpcClients() {

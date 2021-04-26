@@ -423,39 +423,6 @@ class AppController {
       return false;
     });
 
-    if (platformHelper.isWin() || platformHelper.isLinux()) {
-      Mousetrap.bind('f11', () => {
-        this.toggleFullScreen();
-      });
-    }
-  }
-
-  toggleFullScreen() {
-    var platform = null;
-
-    if (platformHelper.isElectron()) {
-
-      platform = electronPlatform;
-
-    } else if (platformHelper.isAndroid()) {
-
-      platform = cordovaPlatform;
-
-    }
-
-    platform.toggleFullScreen();
-
-    const fullScreenButton = document.getElementById('app-container').querySelector('.fullscreen-button');
-
-    if (platform.isFullScreen()) {
-      fullScreenButton.setAttribute('title', i18n.t('menu.exit-fullscreen'));
-      fullScreenButton.firstElementChild.classList.add('fa-compress');
-      fullScreenButton.firstElementChild.classList.remove('fa-expand');
-    } else {
-      fullScreenButton.setAttribute('title', i18n.t('menu.fullscreen'));
-      fullScreenButton.firstElementChild.classList.add('fa-expand');
-      fullScreenButton.firstElementChild.classList.remove('fa-compress');
-    }
   }
   
   getLineBreak() {
