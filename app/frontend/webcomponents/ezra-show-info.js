@@ -104,8 +104,11 @@ class EzraShowInfo extends HTMLElement {
       return;
     }
 
-    const gitCommit = CommitInfo.commit.slice(0, 8);
     //TODO: refactor global vars
+    if(typeof uiHelper !== 'undefined') {
+      uiHelper.initExternalLinkHandling(this.dialog);
+    }
+
     let version = '';
     if (typeof platformHelper !== 'undefined') {
       if (platformHelper.isElectron() && typeof app !== 'undefined') {
@@ -115,6 +118,7 @@ class EzraShowInfo extends HTMLElement {
       }
     }
 
+    const gitCommit = CommitInfo.commit.slice(0, 8);
     const swordVersion = typeof ipcNsi !== 'undefined' ? await ipcNsi.getSwordVersion() : '';
     const chromiumVersion = typeof getChromiumVersion !== 'undefined' ? getChromiumVersion() : '';
     const databasePath = typeof ipcDb !== 'undefined' ? await ipcDb.getDatabasePath() : '';
