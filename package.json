@@ -56,6 +56,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@material/mwc-button": "^0.20.0",
+    "@material/mwc-dialog": "^0.20.0",
     "@material/mwc-icon-button-toggle": "^0.20.0",
     "@sentry/browser": "^6.0.1",
     "@sentry/electron": "^2.0.3",
