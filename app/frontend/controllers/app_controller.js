@@ -42,7 +42,6 @@ const BookSelectionMenu = require("../components/book_selection_menu.js");
 const DictionaryController = require("./dictionary_controller.js");
 const NotesController = require("./notes_controller.js");
 const SwordNotes = require("../components/sword_notes.js");
-const InfoPopup = require("../components/info_popup.js");
 const TextSizeSettings = require("../components/text_size_settings.js");
 const VerseStatisticsChart = require('../components/verse_statistics_chart.js');
 
@@ -109,7 +108,6 @@ class AppController {
     this.init_component("DictionaryController", "dictionary_controller");
     this.init_component("NotesController", "notes_controller");
     this.init_component("SwordNotes", "sword_notes");
-    this.init_component("InfoPopup", "info_popup");
     this.init_component("TextSizeSettings", "textSizeSettings");
     this.init_component("VerseStatisticsChart", "verse_statistics_chart");
 
@@ -273,7 +271,6 @@ class AppController {
     this.tag_assignment_menu.init(tabIndex);
     this.module_search_controller.initModuleSearch(tabIndex);
     await this.translation_controller.initTranslationsMenu(previousTabIndex, tabIndex);
-    this.info_popup.initAppInfoButton();
     this.textSizeSettings.init(tabIndex);
     
     var currentTab = this.tab_controller.getTab(tabIndex);
@@ -281,7 +278,7 @@ class AppController {
     if (currentTab != null) {
       var currentBibleTranslationId = currentTab.getBibleTranslationId();
       if (currentBibleTranslationId != null) {
-        this.info_popup.enableCurrentAppInfoButton(tabIndex);
+        document.querySelector('ezra-control-pan')?.setAttribute('translation-avaliable', '');
       }
     }
 
@@ -325,7 +322,7 @@ class AppController {
     this.resetVerseListView();
     this.hideVerseListLoadingIndicator();
     this.getCurrentVerseList().append("<div class='help-text'>" + i18n.t("help.help-text-no-translations") + "</div>");
-    this.info_popup.disableCurrentAppInfoButton();
+    document.querySelector('ezra-control-pan')?.removeAttribute('translation-avaliable');
     this.verse_selection.clear_verse_selection();
     $('.book-select-value').text(i18n.t("menu.book"));
   }
@@ -927,7 +924,6 @@ class AppController {
 
       this.tab_controller.setCurrentBibleTranslationId(translationCode);
       await this.book_selection_menu.updateAvailableBooks();
-      this.info_popup.enableCurrentAppInfoButton();
     }
   }
 

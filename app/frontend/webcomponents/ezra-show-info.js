@@ -72,10 +72,10 @@ class EzraShowInfo extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
   connectedCallback() {
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     const button = this.shadowRoot.querySelector('#show-info');
     button.addEventListener('click', (e) => this.handleClick(e));

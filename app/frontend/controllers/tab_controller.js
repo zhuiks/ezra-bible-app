@@ -734,7 +734,7 @@ class TabController {
 
     if (bibleTranslationId != null) {
       this.defaultBibleTranslationId = bibleTranslationId;
-      app_controller.info_popup.enableCurrentAppInfoButton();
+      document.querySelector('ezra-control-pan')?.setAttribute('translation-avaliable', '');
     }
   }
 

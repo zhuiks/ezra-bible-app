@@ -15,7 +15,7 @@ template.innerHTML = `
   }
   </style>
   <div class="wrapper">
-    <ezra-show-info></ezra-show-info>
+    <ezra-show-info disabled></ezra-show-info>
     <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;
 
