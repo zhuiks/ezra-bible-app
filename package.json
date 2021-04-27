@@ -116,6 +116,7 @@
     "npm-check-updates": "^10.1.1",
     "pug-cli": "^1.0.0-alpha6",
     "rollup": "^2.45.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "sequelize-cli": "^5.5.1",
     "spectron": "^11.1.0",
     "terser": "^5.5.1",
