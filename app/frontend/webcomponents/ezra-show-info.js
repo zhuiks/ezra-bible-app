@@ -13,6 +13,24 @@ template.innerHTML = `
     #info-popup {
       --mdc-dialog-min-width: 720px;
     }
+
+    #info-popup-content {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    #info-popup-content > .wrapper{
+      display: flex;
+      width: 300%;
+      justify-content: stretch;
+      align-items: start;
+      transition: margin-left .5s;
+    }
+    #info-popup-content > .wrapper > div {
+      flex: 1 1;
+      overflow-y: auto;
+      padding: 2em 1em;
+    }
   </style>
   <mwc-icon-button id="show-info" icon="info" outlined></mwc-icon-button>
   <mwc-dialog id="info-popup">
@@ -21,7 +39,7 @@ template.innerHTML = `
       <mwc-tab id="tab-2" icon="import_contacts"></mwc-tab>
       <mwc-tab id="tab-3" icon="laptop"></mwc-tab>
     </mwc-tab-bar>
-    <div id="info-popup-content">
+    <div id="info-popup-content"><div class="wrapper">
       <div id="tab-1-content"></div>
       <div id="tab-2-content"></div>
       <div id="tab-3-content">
@@ -41,7 +59,7 @@ template.innerHTML = `
             <table id="app-info-table">
             </table>
           </div>
-    </div>
+    </div></div>
     <mwc-button id="close-info" slot="primaryAction" dialogAction="close">Ok</mwc-button>
   </mwc-dialog>
 `;
@@ -71,6 +89,10 @@ class EzraShowInfo extends HTMLElement {
     });
 
     this.dialog.querySelector('#close-info').innerHTML = i18n.t('general.ok');
+
+    this.dialog.addEventListener('MDCTabBar:activated', (e) => {
+      this.switchToTab(e.detail.index);
+    });
   }
 
   async handleClick(event) {
@@ -81,6 +103,10 @@ class EzraShowInfo extends HTMLElement {
     this.populateAppInfo(this.dialog.querySelector('table#app-info-table'));
 
     this.dialog.show();
+  }
+
+  switchToTab(tabIndex) {
+    this.dialog.querySelector('#info-popup-content > .wrapper').style.marginLeft = `${tabIndex * (-100)}%`;
   }
 
   async populateModuleInfo(divInfo, divDetails) {
