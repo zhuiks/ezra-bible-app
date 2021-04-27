@@ -104,7 +104,7 @@ class EzraShowInfo extends HTMLElement {
       return;
     }
 
-    const button = this.shadowRoot.querySelector('#show-info')
+    const button = this.shadowRoot.querySelector('#show-info');
     if (newValue === null) {
       button.removeAttribute('disabled');
     } else {

@@ -19,7 +19,11 @@ template.innerHTML = `
     <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;
 
-  class EzraControlPan extends HTMLElement {
+class EzraControlPan extends HTMLElement {
+  static get observedAttributes() {
+    return ['translation-avaliable'];
+  }
+
   constructor() {
     // Always call super first in constructor
     super();
@@ -31,6 +35,21 @@ template.innerHTML = `
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     console.log('Ezra WC: EzraControlPan attached');
   }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'translation-avaliable') {
+      const button = this.shadowRoot.querySelector('ezra-show-info');
+      if (newValue === null) {
+        button.setAttribute('disabled', '');
+      } else {
+        button.removeAttribute('disabled');
+      }
+
+    }
+
+
+  }
+
 }
 
 // Define the new element
