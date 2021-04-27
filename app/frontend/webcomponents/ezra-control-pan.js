@@ -10,7 +10,7 @@ template.innerHTML = `
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    background: yellow;
+    background: transparent;
     z-index: 100;
   }
   </style>

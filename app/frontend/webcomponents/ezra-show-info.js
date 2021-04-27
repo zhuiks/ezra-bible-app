@@ -1,11 +1,12 @@
-import '@material/mwc-button';
+import '@material/mwc-icon-button';
 import '@material/mwc-dialog';
+import '@material/mwc-button';
 // import i18n from 'i18next';
 
 
 const template = document.createElement('template');
 template.innerHTML = `
-  <mwc-button id="show-info" icon="info" outlined></mwc-button>
+  <mwc-icon-button id="show-info" icon="info" outlined></mwc-icon-button>
   <mwc-dialog id="info-popup">
     <div id="info-popup-content">Some text</div>
     <mwc-button id="close-info" slot="primaryAction" dialogAction="close">Ok</mwc-button>
@@ -23,6 +24,7 @@ class EzraShowInfo extends HTMLElement {
 
     const button = this.shadowRoot.querySelector('#show-info')
     button.addEventListener('click', (e) => this.handleClick(e));
+    button.setAttribute('label', i18n.t('menu.show-module-info'));
     button.setAttribute('title', i18n.t('menu.show-module-info'));
 
     this.dialog = this.shadowRoot.querySelector('#info-popup');
