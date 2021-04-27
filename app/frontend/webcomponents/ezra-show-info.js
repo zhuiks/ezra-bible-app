@@ -65,6 +65,10 @@ template.innerHTML = `
 `;
 
 class EzraShowInfo extends HTMLElement {
+  static get observedAttributes() {
+    return ['disabled'];
+  }
+  
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -73,7 +77,7 @@ class EzraShowInfo extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    const button = this.shadowRoot.querySelector('#show-info')
+    const button = this.shadowRoot.querySelector('#show-info');
     button.addEventListener('click', (e) => this.handleClick(e));
     button.setAttribute('label', i18n.t('menu.show-module-info'));
     button.setAttribute('title', i18n.t('menu.show-module-info'));
@@ -95,6 +99,20 @@ class EzraShowInfo extends HTMLElement {
     });
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name !== 'disabled') {
+      return;
+    }
+
+    const button = this.shadowRoot.querySelector('#show-info')
+    if (newValue === null) {
+      button.removeAttribute('disabled');
+    } else {
+      button.setAttribute('disabled', '');
+    }
+
+  }
+  
   async handleClick(event) {
     if (!this.dialog || this.dialog.getAttribute('open')) {
       return;
