@@ -68,7 +68,7 @@ class EzraShowInfo extends HTMLElement {
   static get observedAttributes() {
     return ['disabled'];
   }
-  
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -112,7 +112,7 @@ class EzraShowInfo extends HTMLElement {
     }
 
   }
-  
+
   async handleClick(event) {
     if (!this.dialog || this.dialog.getAttribute('open')) {
       return;
@@ -136,9 +136,15 @@ class EzraShowInfo extends HTMLElement {
     const currentBibleTranslationId = app_controller.tab_controller.getTab().getBibleTranslationId();
     if (divInfo) {
       divInfo.innerHTML = await app_controller.translation_controller.getModuleDescription(currentBibleTranslationId);
+      if (typeof uiHelper !== 'undefined') {
+        uiHelper.initExternalLinkHandling(divInfo);
+      }
     }
     if (divDetails) {
       divDetails.innerHTML = await app_controller.translation_controller.getModuleInfo(currentBibleTranslationId, false, false);
+      if (typeof uiHelper !== 'undefined') {
+        uiHelper.initExternalLinkHandling(divDetails);
+      }
     }
 
   }
@@ -149,10 +155,6 @@ class EzraShowInfo extends HTMLElement {
     }
 
     //TODO: refactor global vars
-    if(typeof uiHelper !== 'undefined') {
-      uiHelper.initExternalLinkHandling(this.dialog);
-    }
-
     let version = '';
     if (typeof platformHelper !== 'undefined') {
       if (platformHelper.isElectron() && typeof app !== 'undefined') {
@@ -176,6 +178,11 @@ class EzraShowInfo extends HTMLElement {
     <tr><td>${i18n.t("general.database-path")}:</td><td>${databasePath}</td></tr>
     <tr><td>${i18n.t("general.config-file-path")}:</td><td>${configFilePath}</td></tr>
     `;
+
+    if (typeof uiHelper !== 'undefined') {
+      uiHelper.initExternalLinkHandling(this.dialog.querySelector('#tab-3-content'));
+    }
+
   }
 }
 
