@@ -28,81 +28,81 @@ class UiHelper {
     } else {
       var context = document.querySelector(context);
     }
-  
+
     var buttons = context.querySelectorAll('.fg-button');
-  
+
     for (var i = 0; i < buttons.length; i++) {
       var currentButton = buttons[i];
       var currentButtonClasses = currentButton.classList;
-  
+
       if (!currentButtonClasses.contains("ui-state-disabled") && !currentButtonClasses.contains("events-configured")) {
-        currentButton.addEventListener('mouseover', function(e) {
+        currentButton.addEventListener('mouseover', function (e) {
           $(e.target).closest('.fg-button').addClass('ui-state-hover');
         });
-  
-        currentButton.addEventListener('mouseout', function(e) {
+
+        currentButton.addEventListener('mouseout', function (e) {
           $(e.target).closest('.fg-button').removeClass('ui-state-hover');
         });
-  
-        currentButton.addEventListener('mousedown', function(e) {
+
+        currentButton.addEventListener('mousedown', function (e) {
           uiHelper.handleButtonMousedown($(e.target).closest('.fg-button'), e.target.nodeName != 'INPUT');
         });
-  
-        currentButton.addEventListener('mouseup', function(e) {
-          if(!$(e.target).closest('.fg-button').is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+
+        currentButton.addEventListener('mouseup', function (e) {
+          if (!$(e.target).closest('.fg-button').is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button')) {
             $(e.target).closest('.fg-button').removeClass("ui-state-active");
           }
         });
-  
+
         currentButton.classList.add('events-configured');
       }
     }
   }
-  
+
   handleButtonMousedown(element, click_checkbox) {
     $(element).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
     if ($(element).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active')) {
       $(element).removeClass("ui-state-active");
-    } else { 
+    } else {
       $(element).addClass("ui-state-active");
     }
-  
+
     if (click_checkbox) {
       var embedded_input = $(element).find('input:first');
-  
+
       if (embedded_input.attr('type') == 'checkbox') {
         embedded_input[0].click();
       }
     }
   }
-  
+
   initProgressBar(progressBar) {
     var progressLabel = progressBar.find(".progress-label");
-  
+
     progressBar.progressbar({
       value: false,
-      change: function() {
-        progressLabel.text( progressBar.progressbar( "value" ) + "%" );
+      change: function () {
+        progressLabel.text(progressBar.progressbar("value") + "%");
       },
-      complete: function() {
+      complete: function () {
         progressLabel.text(i18n.t('general.completed'));
       }
     });
   }
 
-  adaptVerseList(verseListFrame=undefined) {
+  adaptVerseList(verseListFrame = undefined) {
     if (verseListFrame === undefined) {
       verseListFrame = app_controller.getCurrentVerseListFrame();
     }
-    
+
     if (verseListFrame.width() < 650) {
       verseListFrame.addClass('verse-list-frame-small-screen');
     } else {
       verseListFrame.removeClass('verse-list-frame-small-screen');
     }
   }
-  
-  resizeVerseList(tabIndex=undefined) {
+
+  resizeVerseList(tabIndex = undefined) {
     if (tabIndex === undefined) {
       tabIndex = app_controller.tab_controller.getSelectedTabIndex();
     }
@@ -113,16 +113,16 @@ class UiHelper {
 
     var navigationPane = verseListComposite.find('.navigation-pane');
     var verseListFrame = verseListComposite.find('.verse-list-frame');
-  
+
     var newVerseListHeight = this.app_container_height - tabsNav.height() - currentVerseListMenu.height() - 40;
     navigationPane.css('height', newVerseListHeight);
     verseListFrame.css('height', newVerseListHeight);
-  
+
     this.adaptVerseList(verseListFrame);
   }
-  
+
   // FIXME: Optimize this to be tab-specific
-  resizeAppContainer(e, cycle=false) {
+  resizeAppContainer(e, cycle = false) {
     var verseListTabs = $(document.getElementById('verse-list-tabs'));
     var verseListTabsWidth = verseListTabs.width();
     var windowWidth = window.innerWidth;
@@ -137,8 +137,8 @@ class UiHelper {
     }
 
     if (verseListTabsWidth >= 200 && // Initially, at program start the width is very small (100) - in this
-                                     // case we don't add the small-screen class to avoid flickering.
-        verseListTabsWidth <= 1000) {
+      // case we don't add the small-screen class to avoid flickering.
+      verseListTabsWidth <= 1000) {
 
       verseListTabs.addClass('verse-list-tabs-small-screen')
 
@@ -155,9 +155,9 @@ class UiHelper {
 
     this.app_container_height = $(window).height() - 10;
     $("#app-container").css("height", this.app_container_height);
-  
+
     var tagsToolBarHeight = $('#tags-toolbar').height();
-  
+
     if (app_controller.optionsMenu._dictionaryOption.isChecked()) {
       $('#tags-content-global').css('height', this.app_container_height - tagsToolBarHeight - 540);
       $('#dictionary-info-box-panel').css('height', 422);
@@ -188,7 +188,7 @@ class UiHelper {
     loadingIndicator.show();
     loadingIndicator.find('.loader').show();
   }
-  
+
   hideGlobalLoadingIndicator() {
     var loadingIndicator = $('#startup-loading-indicator');
     loadingIndicator.hide();
@@ -201,18 +201,18 @@ class UiHelper {
     }
   }
 
-  getCurrentTextLoadingIndicator(tabIndex=undefined) {
+  getCurrentTextLoadingIndicator(tabIndex = undefined) {
     var currentVerseListMenu = app_controller.getCurrentVerseListMenu(tabIndex);
     var loadingIndicator = currentVerseListMenu.find('.loader');
     return loadingIndicator;
   }
 
-  showTextLoadingIndicator(tabIndex=undefined) {
+  showTextLoadingIndicator(tabIndex = undefined) {
     var textLoadingIndicator = this.getCurrentTextLoadingIndicator(tabIndex);
     textLoadingIndicator.show();
   }
 
-  hideTextLoadingIndicator(tabIndex=undefined) {
+  hideTextLoadingIndicator(tabIndex = undefined) {
     var textLoadingIndicator = this.getCurrentTextLoadingIndicator(tabIndex);
     textLoadingIndicator.hide();
   }
@@ -231,7 +231,7 @@ class UiHelper {
       const VERSE_LIST_CHILD_ELEMENT_OFFSET = 15;
       let firstElementOffsetX = verseListFrameRect.x + currentNavigationPaneWidth + VERSE_LIST_CHILD_ELEMENT_OFFSET;
       let firstElementOffsetY = verseListFrameRect.y + VERSE_LIST_CHILD_ELEMENT_OFFSET;
-      
+
       let currentElement = document.elementFromPoint(firstElementOffsetX, firstElementOffsetY);
 
       if (currentElement != null && currentElement.classList != null && currentElement.classList.contains('verse-list')) {
@@ -239,17 +239,17 @@ class UiHelper {
         currentElement = document.elementFromPoint(firstElementOffsetX, firstElementOffsetY + 10);
       }
 
-      if (currentElement == null) {
+      if (currentElement == null) {
         return null;
       }
 
-      if (currentElement.classList != null && 
-          (currentElement.classList.contains('sword-section-title') ||
-           currentElement.classList.contains('tag-browser-verselist-book-header'))) {
+      if (currentElement.classList != null &&
+        (currentElement.classList.contains('sword-section-title') ||
+          currentElement.classList.contains('tag-browser-verselist-book-header'))) {
         // We are dealing with a section header element (either sword-section-title or tag-browser-verselist-book-header)
 
         if (currentElement.previousElementSibling != null &&
-            currentElement.previousElementSibling.nodeName == 'A') {
+          currentElement.previousElementSibling.nodeName == 'A') {
 
           currentElement = currentElement.previousElementSibling;
         }
@@ -285,6 +285,28 @@ class UiHelper {
 
     return firstVisibleVerseAnchor;
   }
+
+  initExternalLinkHandling(element = null) {
+
+    element = element || document.querySelector('body');
+    // Open links classified as external in the default web browser
+    element.querySelectorAll('a.external, p.external a, div.external a')
+      .forEach(el => el.addEventListener('click', (event) => {
+        event.preventDefault();
+        const link = event.target.href;
+
+        if (platformHelper.isElectron()) {
+
+          require("electron").shell.openExternal(link);
+
+        } else if (platformHelper.isCordova()) {
+
+          window.open(link, '_system');
+
+        }
+      }));
+  }
+
 }
 
 module.exports = UiHelper;

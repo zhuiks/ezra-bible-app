@@ -203,24 +203,6 @@ class Startup
     }
   }
 
-  initExternalLinkHandling() {
-    // Open links classified as external in the default web browser
-    $('body').on('click', 'a.external, p.external a, div.external a', (event) => {
-      event.preventDefault();
-      let link = event.target.href;
-  
-      if (platformHelper.isElectron()) {
-
-        require("electron").shell.openExternal(link);
-
-      } else if (platformHelper.isCordova()) {
-
-        window.open(link, '_system');
-        
-      }
-    });
-  }
-
   initWebComponents() {
     if (typeof window.initWebComponents === 'function') {
       window.initWebComponents();
@@ -274,7 +256,7 @@ class Startup
       await this.earlyInitNightMode();
     }
 
-    this.initExternalLinkHandling();
+    uiHelper.initExternalLinkHandling();
 
     if (this._platformHelper.isWin()) {
       var isWin10 = await this._platformHelper.isWindowsTenOrLater();
