@@ -117,6 +117,7 @@ class ThemeController {
       await ipcSettings.set(SETTINGS_KEY, this.useNightMode);
     }
 
+    setMaterialTheme(this.useNightMode);
 
     if (this.useNightMode) {
       this.switchToDarkTheme();
@@ -163,6 +164,37 @@ class ThemeController {
 
     return useNightMode;
   }
+}
+
+
+function setMaterialTheme(isDark = false) {
+  let themeStyleEl = document.querySelector('#theme-vars');
+  if (themeStyleEl === null) {
+    themeStyleEl = document.createElement('style');
+    themeStyleEl.setAttribute('id', 'theme-vars');
+    document.querySelector('head').appendChild(themeStyleEl);
+  }
+
+  const stylesheet = themeStyleEl.sheet;
+  
+  for (let i = stylesheet.cssRules.length - 1; i === 0; i--) {
+    stylesheet.deleteRule(i);
+  }
+
+  stylesheet.insertRule(`html {
+    --mdc-theme-primary: ${isDark ? '#39ACDF' : '#2779AA'};
+    --mdc-theme-secondary: #D7EBF9;
+    --mdc-theme-surface: ${isDark ? '#424242' : '#E2F5FB'};
+    --mdc-theme-background: ${isDark ? '#212121' : '#FFFFFF'};
+    --mdc-theme-on-primary: #E2F5FB;
+    --mdc-theme-on-secondary: #001D70;
+    --mdc-theme-on-surface: ${isDark ? '#E2F5FB' : '#212121'};
+
+    --mdc-dialog-scrim-color: rgba(0, 0, 0, ${isDark ? 0.88 : 0.32});
+    --mdc-dialog-heading-ink-color: ${isDark ? '#E2F5FB' : '#212121'};
+    --mdc-dialog-content-ink-color: ${isDark ? '#E2F5FB' : '#212121'};
+    --mdc-dialog-scroll-divider-color: rgba(0, 0, 0, ${isDark ? 0.9 : 0.12});
+  }`);
 }
 
 module.exports = ThemeController;

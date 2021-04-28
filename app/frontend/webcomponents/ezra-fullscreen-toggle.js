@@ -15,7 +15,7 @@ class EzraFullscreenToggle extends HTMLElement {
   }
 
   connectedCallback() {
-    if (typeof platformHelper !== 'undefined' &&platformHelper.isMac()) {
+    if (typeof platformHelper !== 'undefined' && platformHelper.isMac()) {
       return; // no fullscreen button for Mac
     }
 

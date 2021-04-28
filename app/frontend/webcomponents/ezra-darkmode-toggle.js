@@ -1,23 +1,28 @@
 import '@material/mwc-formfield';
 import '@material/mwc-switch';
-
 // import i18n from 'i18next';
 
 const template = document.createElement('template');
 template.innerHTML = `
 <mwc-formfield id="dark-mode" label="bible-browser.use-night-mode">
-  <mwc-switch></mwc-switch>
+  <mwc-switch id="switch"></mwc-switch>
 </mwc-formfield>
 `;
 
 class EzraDarkmodeToggle extends HTMLElement {
   constructor() {
     super();
-    this.isDarkmode = false;
     this.attachShadow({ mode: 'open' });
   }
 
-  connectedCallback() {
+  async connectedCallback() {
+    if (!window.theme_controller) { // can't do anything without theme controller!
+      return;
+    }
+    if (typeof platformHelper !== 'undefined' && platformHelper.isMacOsMojaveOrLater()) {
+      return; // On macOS Mojave and later we do not give the user the option to switch night mode within the app, since it is controlled via system settings.
+    }
+
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     const formfield = this.shadowRoot.querySelector('#dark-mode');
@@ -25,38 +30,16 @@ class EzraDarkmodeToggle extends HTMLElement {
     formfield.setAttribute('label', localizedLabel);
     this.setAttribute('title', localizedLabel); 
 
-    formfield.addEventListener('change', (e) => this.toggleDarkMode(e));
-  }
-
-  toggleDarkMode(e) {
-    // const platform = this.getPlatform(); 
-    // if (!platform) {
-    //   e.preventDefault();
-    //   return;
-    // }
-
-    this.isDarkmode = !this.isDarkmode;
-    console.log('darkmode:', this.isDarkmode)
-
-    // platform.toggleFullScreen();
-  }
-
-  getPlatform() { 
-    // TODO: move to platformHelper && refactor global vars
-    if (typeof platformHelper === 'undefined') {
-      return null;
-    }  
-
-    if (platformHelper.isElectron()) {
-      return electronPlatform;
-    }
-    
-    if (platformHelper.isAndroid()) {
-      return cordovaPlatform;
+    const trigger = formfield.querySelector('#switch');
+    if (window.theme_controller.useNightMode) {
+      trigger.setAttribute('checked', '');
+    } else {
+      trigger.removeAttribute('checked');
     }
 
-    return undefined;
+    trigger.addEventListener('change', () => window.theme_controller.useNightModeBasedOnOption());
   }
+
 }
 
 customElements.define('ezra-darkmode-toggle', EzraDarkmodeToggle);
