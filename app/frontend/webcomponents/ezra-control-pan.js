@@ -1,5 +1,6 @@
 import './ezra-show-info';
-import './ezra-fullscreen-toggle.js';
+import './ezra-darkmode-toggle';
+import './ezra-fullscreen-toggle';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -16,6 +17,7 @@ template.innerHTML = `
   </style>
   <div class="wrapper">
     <ezra-show-info disabled></ezra-show-info>
+    <ezra-darkmode-toggle></ezra-darkmode-toggle>
     <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;
 
