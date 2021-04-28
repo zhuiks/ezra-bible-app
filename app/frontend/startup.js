@@ -33,6 +33,9 @@ const IpcSettings = require('./ipc/ipc_settings.js');
 const UiHelper = require('./helpers/ui_helper.js');
 window.uiHelper = new UiHelper();
 
+const ThemeController = require('./controllers/theme_controller.js');
+window.theme_controller = new ThemeController();
+
 /**
  * The Startup class has the purpose to start up the application.
  * The main entry point is the method `initApplication()`.
@@ -159,9 +162,6 @@ class Startup
     await app_controller.init();
   
     window.tags_controller = new TagsController();
-
-    const ThemeController = require('./controllers/theme_controller.js');
-    window.theme_controller = new ThemeController();
   }
 
   initUi() {
@@ -195,14 +195,6 @@ class Startup
     }
   }
   
-  async earlyInitNightMode() {
-    var useNightMode = await ipcSettings.get('useNightMode', false);
-  
-    if (useNightMode) {
-      document.body.classList.add('darkmode--activated');
-    }
-  }
-
   initWebComponents() {
     if (typeof window.initWebComponents === 'function') {
       window.initWebComponents();
@@ -252,8 +244,9 @@ class Startup
       await this.earlyHideToolBar();
     }
 
+    theme_controller.init();
     if (this._platformHelper.isCordova()) {
-      await this.earlyInitNightMode();
+      await theme_controller.earlyInitNightMode();
     }
 
     uiHelper.initExternalLinkHandling();

@@ -18,29 +18,42 @@
 
 const Darkmode = require('darkmode-js');
 
+const SETTINGS_KEY = 'useNightMode';
+
 /**
  * The ThemeController contains functions for switching between the standard (light theme)
  * and the dark "night" theme. Whenever the user switches the "night mode" in the options menu, this controller
  * processes the change.
  * 
  * Like all other controllers it is only initialized once. It is accessible at the
- * global object `app_controller.theme_controller`.
+ * global object `window.theme_controller`.
  * 
  * @category Controller
  */
 class ThemeController {
   constructor() {
     this.darkMode = null;
+    this.useNightMode = false;
+  }
+
+  async init() {
+    this.useNightMode = await ipcSettings.get(SETTINGS_KEY, this.useNightMode);
+  }
+
+  async earlyInitNightMode() {
+    if (this.useNightMode) {
+      document.body.classList.add('darkmode--activated');
+    }
   }
 
   async initNightMode() {
     var isMojaveOrLater = await platformHelper.isMacOsMojaveOrLater();
-    if (isMojaveOrLater) { // On macOS (from Mojave) we initialize night mode based on the system settings
+    if (isMojaveOrLater) { // On macOS (from Mojave) we initialize night mode based on the system settings
       const nativeTheme = require('electron').remote.nativeTheme;
 
       // Set up a listener to react when the native theme has changed
       nativeTheme.on('updated', () => {
-        if (nativeTheme.shouldUseDarkColors != app_controller.optionsMenu._nightModeOption.isChecked()) {
+        if (nativeTheme.shouldUseDarkColors != this.useNightMode) {
           uiHelper.showGlobalLoadingIndicator();
 
           setTimeout(() => {
@@ -50,22 +63,15 @@ class ThemeController {
         }
       });
 
-      if (nativeTheme.shouldUseDarkColors != app_controller.optionsMenu._nightModeOption.isChecked()) {
+      if (nativeTheme.shouldUseDarkColors != this.useNightMode) {
         console.log("Initializing night mode based on system settings ...");
         this.toggleDarkModeIfNeeded();
       }
 
     } else { // On other systems we initialize night mode based on the application settings
-
-      var useNightModeSettingAvailable = await ipcSettings.has('useNightMode');
-
-      if (useNightModeSettingAvailable) {
-        var useNightMode = await ipcSettings.get('useNightMode');
-    
-        if (useNightMode) {
-          console.log("Initializing night mode based on app settings ...");
-          this.useNightModeBasedOnOption(true);
-        }
+      if (this.useNightMode) {
+        console.log("Initializing night mode based on app settings ...");
+        this.useNightModeBasedOnOption(true);
       }
     }
   }
@@ -89,22 +95,30 @@ class ThemeController {
     this.switchToTheme('css/jquery-ui/dark-hive/jquery-ui.css');
     app_controller.notes_controller.setDarkTheme();
   }
-  
+
   switchToRegularTheme() {
     this.switchToTheme('css/jquery-ui/cupertino/jquery-ui.css');
     app_controller.notes_controller.setLightTheme();
   }
-  
+
   switchToTheme(theme) {
     var currentTheme = document.getElementById("theme-css").href;
-  
+
     if (currentTheme.indexOf(theme) == -1) { // Only switch the theme if it is different from the current theme
       document.getElementById("theme-css").href = theme;
     }
   }
 
-  async useNightModeBasedOnOption(force=false) {
-    if (force || app_controller.optionsMenu._nightModeOption.isChecked(force)) {
+  async useNightModeBasedOnOption(force = false) {
+    uiHelper.showGlobalLoadingIndicator();
+
+    if (!force) {
+      this.useNightMode = !this.useNightMode;
+      await ipcSettings.set(SETTINGS_KEY, this.useNightMode);
+    }
+
+
+    if (this.useNightMode) {
       this.switchToDarkTheme();
     } else {
       this.switchToRegularTheme();
@@ -114,15 +128,22 @@ class ThemeController {
       this.darkMode = new Darkmode();
     }
 
-    var nightModeOptionChecked = force ? true : app_controller.optionsMenu._nightModeOption.isChecked();
+    if (this.useNightMode && !this.darkMode.isActivated() ||
+      !this.useNightMode && this.darkMode.isActivated()) {
 
-    if (nightModeOptionChecked && !this.darkMode.isActivated() ||
-        !nightModeOptionChecked && this.darkMode.isActivated()) {
-          
       this.darkMode.toggle();
       // We need to repaint all charts, because the label color depends on the theme
       await app_controller.verse_statistics_chart.repaintAllCharts();
     }
+
+    if (platformHelper.isCordova()) {
+      // On Cordova we persist a basic night mode style in a CSS file 
+      // which is then loaded on startup again
+      await ipcSettings.storeNightModeCss();
+    }
+
+    await waitUntilIdle();
+    uiHelper.hideGlobalLoadingIndicator();
   }
 
   async isNightModeUsed() {
@@ -133,10 +154,10 @@ class ThemeController {
       const nativeTheme = require('electron').remote.nativeTheme;
       useNightMode = nativeTheme.shouldUseDarkColors;
     } else {
-      var useNightModeSettingAvailable = await ipcSettings.has('useNightMode');
+      var useNightModeSettingAvailable = await ipcSettings.has(SETTINGS_KEY);
 
       if (useNightModeSettingAvailable) {
-        useNightMode = await ipcSettings.get('useNightMode');
+        useNightMode = await ipcSettings.get(SETTINGS_KEY);
       }
     }
 

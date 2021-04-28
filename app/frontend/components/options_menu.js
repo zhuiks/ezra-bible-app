@@ -77,19 +77,9 @@ class OptionsMenu {
       app_controller.textSizeSettings.updateTagsNotes(this._textSizeAdjustTagsNotesOption.isChecked()); 
     }, true);
 
-    this._nightModeOption = await this.initDisplayOption('night-mode-switch', 'useNightMode', async () => {
+    this._nightModeOption = await this.initDisplayOption('night-mode-switch', 'useNightMode_legacy', async () => {
       this.hideDisplayMenu();
-      uiHelper.showGlobalLoadingIndicator();
       theme_controller.useNightModeBasedOnOption();
-
-      if (this.platformHelper.isCordova()) {
-        // On Cordova we persist a basic night mode style in a CSS file 
-        // which is then loaded on startup again
-        await ipcSettings.storeNightModeCss();
-      }
-
-      await waitUntilIdle();
-      uiHelper.hideGlobalLoadingIndicator();
     }, false, // enabledByDefault
     async () => { // customSettingsLoader
       return await theme_controller.isNightModeUsed();
@@ -446,7 +436,7 @@ class OptionsMenu {
     this.showOrHideVerseNotesBasedOnOption(tabIndex);
     this.fixNotesHeightBasedOnOption(tabIndex);
     this.keepScreenAwakeBasedOnOption(tabIndex);
-    theme_controller.useNightModeBasedOnOption();
+    // theme_controller.useNightModeBasedOnOption();
   }
 }
 
