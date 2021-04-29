@@ -10,7 +10,7 @@ template.innerHTML = `
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     background: transparent;
     z-index: 100;
   }
@@ -23,7 +23,7 @@ template.innerHTML = `
 
 class EzraControlPan extends HTMLElement {
   static get observedAttributes() {
-    return ['translation-avaliable', 'theme'];
+    return ['translation-avaliable'];
   }
 
   constructor() {
@@ -47,10 +47,6 @@ class EzraControlPan extends HTMLElement {
         button.removeAttribute('disabled');
       }
       return;
-    }
-
-    if (name === 'theme' && newValue !== oldValue) {
-      setTheme(newValue);
     }
   }
 
