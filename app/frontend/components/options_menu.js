@@ -77,20 +77,6 @@ class OptionsMenu {
       app_controller.textSizeSettings.updateTagsNotes(this._textSizeAdjustTagsNotesOption.isChecked()); 
     }, true);
 
-    this._nightModeOption = await this.initDisplayOption('night-mode-switch', 'useNightMode_legacy', async () => {
-      this.hideDisplayMenu();
-      theme_controller.useNightModeBasedOnOption();
-    }, false, // enabledByDefault
-    async () => { // customSettingsLoader
-      return await theme_controller.isNightModeUsed();
-    });
-
-    var isMojaveOrLater = await this.platformHelper.isMacOsMojaveOrLater();
-    if (isMojaveOrLater) {
-      // On macOS Mojave and later we do not give the user the option to switch night mode within the app, since it is controlled via system settings.
-      $('#night-mode-switch-box').hide();
-    }
-
     this._keepScreenAwakeOption = await this.initDisplayOption('screen-awake-switch', 'keepScreenAwake', () => { this.keepScreenAwakeBasedOnOption(); });
 
     if (!this.platformHelper.isCordova()) {
@@ -436,7 +422,6 @@ class OptionsMenu {
     this.showOrHideVerseNotesBasedOnOption(tabIndex);
     this.fixNotesHeightBasedOnOption(tabIndex);
     this.keepScreenAwakeBasedOnOption(tabIndex);
-    // theme_controller.useNightModeBasedOnOption();
   }
 }
 
