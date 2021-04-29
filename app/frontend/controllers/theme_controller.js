@@ -22,8 +22,8 @@ const SETTINGS_KEY = 'useNightMode';
 
 /**
  * The ThemeController contains functions for switching between the standard (light theme)
- * and the dark "night" theme. Whenever the user switches the "night mode" in the options menu, this controller
- * processes the change.
+ * and the dark "night" theme. Whenever the user switches the "night mode", this controller
+ * processes the change and preserves the setting.
  * 
  * Like all other controllers it is only initialized once. It is accessible at the
  * global object `window.theme_controller`.
@@ -36,21 +36,30 @@ class ThemeController {
     this.useNightMode = false;
   }
 
+  /** restores the preserved setting */
   async init() {
     this.useNightMode = await ipcSettings.get(SETTINGS_KEY, this.useNightMode);
+    
+    if (platformHelper.isCordova()) {
+      this._earlyUpdateUI();
+    }
   }
 
+  /**
+   * The only source of truth regarding status of the dark mode
+   * @returns {boolean} is DarkMode activated
+   */
   isDarkModeActive() {
     return this.useNightMode;
   }
 
-  async earlyInitNightMode() {
+  _earlyUpdateUI() {
     if (this.useNightMode) {
       document.body.classList.add('darkmode--activated');
     }
   }
 
-  async initNightMode() {
+  async updateUiNightMode() {
     var isMojaveOrLater = await platformHelper.isMacOsMojaveOrLater();
     if (isMojaveOrLater) { // On macOS (from Mojave) we initialize night mode based on the system settings
       const nativeTheme = require('electron').remote.nativeTheme;
@@ -93,6 +102,11 @@ class ThemeController {
     }
   }
 
+  /**
+   * The main function to toggle between dark and light themes
+   * It updates UI and calls other component & controller methods 
+   * to set appropriate theme
+   */
   async toggleDarkMode() {
     uiHelper.showGlobalLoadingIndicator();
     

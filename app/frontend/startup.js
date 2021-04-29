@@ -183,6 +183,8 @@ class Startup
     uiHelper.configureButtonStyles();
   
     $(window).bind("resize", () => { uiHelper.resizeAppContainer(); });
+
+    theme_controller.updateUiNightMode();
   }
 
   async earlyHideToolBar() {
@@ -244,10 +246,7 @@ class Startup
       await this.earlyHideToolBar();
     }
 
-    theme_controller.init();
-    if (this._platformHelper.isCordova()) {
-      await theme_controller.earlyInitNightMode();
-    }
+    await theme_controller.init();
 
     uiHelper.initExternalLinkHandling();
 
@@ -282,7 +281,6 @@ class Startup
     console.log("Initializing user interface ...");
     this.initUi();
     await app_controller.optionsMenu.init();
-    theme_controller.initNightMode();
 
     // Wait for the UI to render
     await waitUntilIdle();
