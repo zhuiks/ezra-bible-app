@@ -176,7 +176,7 @@ function setMaterialTheme(isDark = false) {
   }
 
   const stylesheet = themeStyleEl.sheet;
-  
+
   for (let i = stylesheet.cssRules.length - 1; i === 0; i--) {
     stylesheet.deleteRule(i);
   }
@@ -189,10 +189,12 @@ function setMaterialTheme(isDark = false) {
     --mdc-theme-on-primary: #E2F5FB;
     --mdc-theme-on-secondary: #001D70;
     --mdc-theme-on-surface: ${isDark ? '#E2F5FB' : '#212121'};
+    
+    --mdc-theme-text-primary-on-background: var(--mdc-theme-on-surface);
 
     --mdc-dialog-scrim-color: rgba(0, 0, 0, ${isDark ? 0.88 : 0.32});
-    --mdc-dialog-heading-ink-color: ${isDark ? '#E2F5FB' : '#212121'};
-    --mdc-dialog-content-ink-color: ${isDark ? '#E2F5FB' : '#212121'};
+    --mdc-dialog-heading-ink-color: var(--mdc-theme-on-surface);
+    --mdc-dialog-content-ink-color: var(--mdc-theme-on-surface);
     --mdc-dialog-scroll-divider-color: rgba(0, 0, 0, ${isDark ? 0.9 : 0.12});
   }`);
 }
