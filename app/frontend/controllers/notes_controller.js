@@ -380,7 +380,7 @@ class NotesController {
 
   getCurrentTheme() {
     var theme = 'default';
-    if (theme_controller && theme_controller.useNightMode) {
+    if (theme_controller && theme_controller.isDarkModeActive()) {
       theme = 'mbo';
     }
 

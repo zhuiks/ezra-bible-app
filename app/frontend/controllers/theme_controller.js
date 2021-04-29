@@ -40,6 +40,10 @@ class ThemeController {
     this.useNightMode = await ipcSettings.get(SETTINGS_KEY, this.useNightMode);
   }
 
+  isDarkModeActive() {
+    return this.useNightMode;
+  }
+
   async earlyInitNightMode() {
     if (this.useNightMode) {
       document.body.classList.add('darkmode--activated');
@@ -57,7 +61,7 @@ class ThemeController {
           uiHelper.showGlobalLoadingIndicator();
 
           setTimeout(() => {
-            this.toggleDarkModeIfNeeded();
+            this._updateDarkModeIfNeeded();
             uiHelper.hideGlobalLoadingIndicator();
           }, 100);
         }
@@ -65,18 +69,16 @@ class ThemeController {
 
       if (nativeTheme.shouldUseDarkColors != this.useNightMode) {
         console.log("Initializing night mode based on system settings ...");
-        this.toggleDarkModeIfNeeded();
+        this._updateDarkModeIfNeeded();
       }
 
     } else { // On other systems we initialize night mode based on the application settings
-      if (this.useNightMode) {
-        console.log("Initializing night mode based on app settings ...");
-        this.useNightModeBasedOnOption(true);
-      }
+      console.log("Initializing night mode based on app settings ...");
+      this._updateUI();
     }
   }
 
-  async toggleDarkModeIfNeeded() {
+  async _updateDarkModeIfNeeded() {
     var isMojaveOrLater = await platformHelper.isMacOsMojaveOrLater();
     if (isMojaveOrLater) {
       const nativeTheme = require('electron').remote.nativeTheme;
@@ -87,42 +89,31 @@ class ThemeController {
         app_controller.optionsMenu._nightModeOption.disableOption();
       }
 
-      this.useNightModeBasedOnOption();
+      this._updateUI();
     }
   }
 
-  switchToDarkTheme() {
-    this.switchToTheme('css/jquery-ui/dark-hive/jquery-ui.css');
-    app_controller.notes_controller.setDarkTheme();
-  }
-
-  switchToRegularTheme() {
-    this.switchToTheme('css/jquery-ui/cupertino/jquery-ui.css');
-    app_controller.notes_controller.setLightTheme();
-  }
-
-  switchToTheme(theme) {
-    var currentTheme = document.getElementById("theme-css").href;
-
-    if (currentTheme.indexOf(theme) == -1) { // Only switch the theme if it is different from the current theme
-      document.getElementById("theme-css").href = theme;
-    }
-  }
-
-  async useNightModeBasedOnOption(force = false) {
+  async toggleDarkMode() {
     uiHelper.showGlobalLoadingIndicator();
+    
+    this.useNightMode = !this.useNightMode;
+    
+    await this._updateUI();
+    await this._saveSettings();
 
-    if (!force) {
-      this.useNightMode = !this.useNightMode;
-      await ipcSettings.set(SETTINGS_KEY, this.useNightMode);
-    }
+    await waitUntilIdle();
+    uiHelper.hideGlobalLoadingIndicator();
+  }
 
+  async _updateUI() {
     setMaterialTheme(this.useNightMode);
 
     if (this.useNightMode) {
-      this.switchToDarkTheme();
+      switchJqueryUiTheme('css/jquery-ui/dark-hive/jquery-ui.css');
+      app_controller.notes_controller.setDarkTheme();
     } else {
-      this.switchToRegularTheme();
+      switchJqueryUiTheme('css/jquery-ui/cupertino/jquery-ui.css');
+      app_controller.notes_controller.setLightTheme();
     }
 
     if (this.darkMode == null) {
@@ -137,32 +128,25 @@ class ThemeController {
       await app_controller.verse_statistics_chart.repaintAllCharts();
     }
 
+  }
+
+  async _saveSettings() {
+    await ipcSettings.set(SETTINGS_KEY, this.useNightMode);
+    
     if (platformHelper.isCordova()) {
       // On Cordova we persist a basic night mode style in a CSS file 
       // which is then loaded on startup again
       await ipcSettings.storeNightModeCss();
     }
-
-    await waitUntilIdle();
-    uiHelper.hideGlobalLoadingIndicator();
   }
 
-  async isNightModeUsed() {
-    var useNightMode = false;
+}
 
-    var isMojaveOrLater = platformHelper.isMacOsMojaveOrLater();
-    if (isMojaveOrLater) {
-      const nativeTheme = require('electron').remote.nativeTheme;
-      useNightMode = nativeTheme.shouldUseDarkColors;
-    } else {
-      var useNightModeSettingAvailable = await ipcSettings.has(SETTINGS_KEY);
+function switchJqueryUiTheme(theme) {
+  var currentTheme = document.getElementById("theme-css").href;
 
-      if (useNightModeSettingAvailable) {
-        useNightMode = await ipcSettings.get(SETTINGS_KEY);
-      }
-    }
-
-    return useNightMode;
+  if (currentTheme.indexOf(theme) == -1) { // Only switch the theme if it is different from the current theme
+    document.getElementById("theme-css").href = theme;
   }
 }
 

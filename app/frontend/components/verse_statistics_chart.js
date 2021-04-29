@@ -111,7 +111,7 @@ class VerseStatisticsChart {
     };
 
     var chartElement = this.getVerseStatisticsChart(tabIndex);
-    var useNightMode = theme_controller.useNightMode;
+    var useNightMode = theme_controller.isDarkModeActive();
     var labelFontColor = useNightMode ? "white" : "black";
     
     new Chart(chartElement, {

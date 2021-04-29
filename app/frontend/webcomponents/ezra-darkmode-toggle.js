@@ -31,13 +31,13 @@ class EzraDarkmodeToggle extends HTMLElement {
     this.setAttribute('title', localizedLabel); 
 
     const trigger = formfield.querySelector('#switch');
-    if (window.theme_controller.useNightMode) {
+    if (window.theme_controller.isDarkModeActive()) {
       trigger.setAttribute('checked', '');
     } else {
       trigger.removeAttribute('checked');
     }
 
-    trigger.addEventListener('change', () => window.theme_controller.useNightModeBasedOnOption());
+    trigger.addEventListener('change', () => window.theme_controller.toggleDarkMode());
   }
 
 }
