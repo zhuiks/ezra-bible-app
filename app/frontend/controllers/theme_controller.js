@@ -194,6 +194,9 @@ function setMaterialTheme(isDark = false) {
     --mdc-dialog-heading-ink-color: var(--mdc-theme-on-surface);
     --mdc-dialog-content-ink-color: var(--mdc-theme-on-surface);
     --mdc-dialog-scroll-divider-color: rgba(0, 0, 0, ${isDark ? 0.9 : 0.12});
+
+    --mdc-checkbox-ink-color: var(--mdc-theme-primary);
+    --mdc-checkbox-unchecked-color: var(--mdc-theme-secondary);
   }`);
 }
 

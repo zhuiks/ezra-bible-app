@@ -19,7 +19,7 @@ class EzraFullscreenToggle extends HTMLElement {
       return; // no fullscreen button for Mac
     }
 
-    if (typeof platformHelper !== 'undefined' && (platformHelper.isWin() || platformHelper.isLinux()) && typeof Mousetrap !== 'undefined') { // Mousetrap should be globabl under window.Mousetrap
+    if (typeof platformHelper !== 'undefined' && (platformHelper.isWin() || platformHelper.isLinux()) && typeof Mousetrap !== 'undefined') { // Mousetrap should be global under window.Mousetrap
       Mousetrap.bind('f11', () => {
         this.toggleFullScreen();
         this.updateIcon();
