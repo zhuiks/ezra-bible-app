@@ -38,6 +38,10 @@ class EzraControlPan extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     console.log('Ezra WC: EzraControlPan attached');
+
+    if (app_controller && app_controller.tab_controller && app_controller.tab_controller.getTab().getBibleTranslationId()) {
+      this.setAttribute('translation-avaliable', '');
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
