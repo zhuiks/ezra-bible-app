@@ -269,8 +269,6 @@ class Startup
     await this.initI18N();
     $(document).localize();
 
-    this.initWebComponents();
-
     if (this._platformHelper.isTest()) {
       await this.initTest();
     }
@@ -290,6 +288,8 @@ class Startup
     if (this._platformHelper.isElectron() || this._platformHelper.isCordova()) {
       await app_controller.loadSettings();
     }
+
+    this.initWebComponents();
 
     uiHelper.updateLoadingSubtitle("Waiting for app to get ready");
 

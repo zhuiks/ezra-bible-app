@@ -1,4 +1,5 @@
 import './ezra-show-info';
+import './ezra-text-size';
 import './ezra-darkmode-toggle';
 import './ezra-fullscreen-toggle';
 
@@ -17,6 +18,7 @@ template.innerHTML = `
   </style>
   <div class="wrapper">
     <ezra-show-info disabled></ezra-show-info>
+    <ezra-text-size></ezra-text-size>
     <ezra-darkmode-toggle></ezra-darkmode-toggle>
     <ezra-fullscreen-toggle></ezra-fullscreen-toggle>
   </div>`;

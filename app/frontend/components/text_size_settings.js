@@ -65,33 +65,33 @@ class TextSizeSettings {
       this.performSizeChange(event, () => { this.increaseSize(); });
     });
 
-    if (this.stylesheet === null) {
-      var styleEl = $('<style id="dynamic-text-size" />')
-      $("head").append(styleEl);
-      this.stylesheet = styleEl[0].sheet;
+    // if (this.stylesheet === null) {
+    //   var styleEl = $('<style id="dynamic-text-size" />')
+    //   $("head").append(styleEl);
+    //   this.stylesheet = styleEl[0].sheet;
 
-      Mousetrap.bind(INCREASE_SHORTCUT, () => {
-        this.increaseSize();
-        return false;
-      });
+    //   Mousetrap.bind(INCREASE_SHORTCUT, () => {
+    //     this.increaseSize();
+    //     return false;
+    //   });
 
-      Mousetrap.bind(DECREASE_SHORTCUT, () => {
-        this.decreaseSize();
-        return false;
-      });
+    //   Mousetrap.bind(DECREASE_SHORTCUT, () => {
+    //     this.decreaseSize();
+    //     return false;
+    //   });
 
-      Mousetrap.bind(RESET_SHORTCUT, () => {
-        this.resetSize();
-        return false;
-      });
+    //   Mousetrap.bind(RESET_SHORTCUT, () => {
+    //     this.resetSize();
+    //     return false;
+    //   });
 
-      if (window.ipcSettings) {
-        this._textSizeValue = await window.ipcSettings.get(SETTINGS_KEY, DEFAULT_TEXT_SIZE);
-        this._shouldTagsNotesResize = await window.ipcSettings.get('adjustTagsNotesTextSize', this._shouldTagsNotesResize);
-      }
+    //   if (window.ipcSettings) {
+    //     this._textSizeValue = await window.ipcSettings.get(SETTINGS_KEY, DEFAULT_TEXT_SIZE);
+    //     this._shouldTagsNotesResize = await window.ipcSettings.get('adjustTagsNotesTextSize', this._shouldTagsNotesResize);
+    //   }
 
-      this.updateStyle();
-    }
+    //   this.updateStyle();
+    // }
   }
 
   async performSizeChange(event, changeSizeOperation) {
